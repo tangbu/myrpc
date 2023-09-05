@@ -37,13 +37,7 @@ public class DynamicProxy implements InvocationHandler {
 
         RpcResponse response = invokeRpc(request);
 
-        /*String result=  "动态代理返回的结果";
-        RpcResponse response = new RpcResponse();
-        response.setRequestId(request.getRequestId());
-        response.setResult(result);
-        response.setSuccess(true);
-
-        System.out.println("远程调用返回的结果"+ response);*/
+        System.out.println("远程调用返回的结果"+ response);
 
         return response.getResult();
     }

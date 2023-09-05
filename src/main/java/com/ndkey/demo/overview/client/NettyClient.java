@@ -39,7 +39,7 @@ public class NettyClient implements Runnable {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
 
-                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1460, 4, 4, -8, 0));
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1460, 1, 4, -5, 0));
                             ch.pipeline().addLast(new NettyMessageDecoder());
                             ch.pipeline().addLast(new NettyMessageEncoder());
                             ch.pipeline().addLast(new NettyClientHandler());

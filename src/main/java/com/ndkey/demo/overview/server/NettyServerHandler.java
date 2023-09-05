@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ndkey.demo.overview.pojo.RpcRequest;
 import com.ndkey.demo.overview.pojo.RpcResponse;
-import com.ndkey.demo.overview.struct.Header;
 import com.ndkey.demo.overview.struct.NettyMessage;
 import com.ndkey.exception.DkRuntimeException;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,7 +23,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private ObjectMapper mapper = new ObjectMapper();
 
 
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NettyMessage message = (NettyMessage) msg;
@@ -34,10 +32,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         RpcResponse rpcResponse = handleRpcRequest(rpcRequest);
 
         NettyMessage response = new NettyMessage();
-        Header header = new Header();
-        header.setType((byte) 1);
-        header.setPriority((byte) 2);
-        response.setHeader(header);
+        response.setType((byte) 1);
+        response.setPriority((byte) 2);
         response.setBody(mapper.readValue(mapper.writeValueAsString(rpcResponse), JsonNode.class));
 
         ctx.channel().writeAndFlush(response);

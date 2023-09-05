@@ -8,15 +8,42 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 public final class NettyMessage {
 
-    private Header header;
-    private JsonNode body; // 基础类型 。。。 todo
+    private byte version = 1;
+    private int length;// 消息长度
+    private byte type;// 消息类型
+    private byte priority;// 消息优先级;
+    private JsonNode body; // 目前全部用json传递请求
 
-    public Header getHeader() {
-        return header;
+    public byte getVersion() {
+        return version;
     }
 
-    public void setHeader(Header header) {
-        this.header = header;
+    public void setVersion(byte version) {
+        this.version = version;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
+    public byte getPriority() {
+        return priority;
+    }
+
+    public void setPriority(byte priority) {
+        this.priority = priority;
     }
 
     public JsonNode getBody() {
@@ -30,7 +57,10 @@ public final class NettyMessage {
     @Override
     public String toString() {
         return "NettyMessage{" +
-                "header=" + header +
+                "version=" + version +
+                ", length=" + length +
+                ", type=" + type +
+                ", priority=" + priority +
                 ", body=" + body +
                 '}';
     }

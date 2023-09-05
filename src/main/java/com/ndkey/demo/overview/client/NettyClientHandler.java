@@ -7,7 +7,6 @@ import com.ndkey.demo.overview.future.RpcReqResponseFuture;
 import com.ndkey.demo.overview.pojo.RpcRequest;
 import com.ndkey.demo.overview.pojo.RpcResponse;
 import com.ndkey.demo.overview.struct.NettyMessage;
-import com.ndkey.demo.overview.struct.Header;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -41,10 +40,8 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         reqRespFutures.put(request.getRequestId(), future);
 
         NettyMessage nettyMessage = new NettyMessage();
-        Header header = new Header();
-        header.setType((byte) 1);
-        header.setPriority((byte) 2);
-        nettyMessage.setHeader(header);
+        nettyMessage.setType((byte) 1);
+        nettyMessage.setPriority((byte) 2);
         nettyMessage.setBody(mapper.readValue(mapper.writeValueAsString(request), JsonNode.class));
 
         ctx.channel().writeAndFlush(nettyMessage);

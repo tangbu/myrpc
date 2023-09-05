@@ -12,11 +12,9 @@ import java.io.IOException;
  */
 public class JsonObjectDecoder {
     ObjectMapper mapper = new ObjectMapper();
-    public byte[] OBJECT_LENGTH_PLACE_HOLDER = new byte[4];
 
-    public JsonNode decode(ByteBuf in) throws DkException {
-        int length = in.readInt();
-        byte[] bodyBytes = new byte[length];
+    public JsonNode decode(ByteBuf in, int objectSize) throws DkException {
+        byte[] bodyBytes = new byte[objectSize];
         in.readBytes(bodyBytes);
         JsonNode jsonNode = null;
         try {

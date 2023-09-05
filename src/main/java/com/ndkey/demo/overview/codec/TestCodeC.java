@@ -19,7 +19,6 @@ package com.ndkey.demo.overview.codec;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.ndkey.demo.overview.struct.Header;
 import com.ndkey.demo.overview.struct.NettyMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -44,11 +43,9 @@ public class TestCodeC {
 
     public NettyMessage getMessage() {
         NettyMessage nettyMessage = new NettyMessage();
-        Header header = new Header();
-        header.setLength(123);
-        header.setType((byte) 1);
-        header.setPriority((byte) 7);
-        nettyMessage.setHeader(header);
+        nettyMessage.setLength(123);
+        nettyMessage.setType((byte) 1);
+        nettyMessage.setPriority((byte) 7);
         TextNode textNode = JsonNodeFactory.instance.textNode("i,am body");
         nettyMessage.setBody(textNode);
         return nettyMessage;
@@ -56,28 +53,25 @@ public class TestCodeC {
 
     public ByteBuf encode(NettyMessage msg) throws Exception {
         ByteBuf out = Unpooled.buffer();
-        Header header = msg.getHeader();
-        out.writeInt(header.getVersion());
-        out.writeInt(header.getLength());  // 后续需要进行修改
-        out.writeByte(header.getType());
-        out.writeByte(header.getPriority());
+        out.writeByte(msg.getVersion());
+        out.writeInt(msg.getLength());  // 后续需要进行修改
+        out.writeByte(msg.getType());
+        out.writeByte(msg.getPriority());
 
         JsonNode body = msg.getBody();
         encoder.encode(body, out);
-        out.setInt(4, out.readableBytes());
+        out.setInt(1, out.readableBytes());
         return out;
     }
 
     public NettyMessage decode(ByteBuf in) throws Exception {
         NettyMessage message = new NettyMessage();
-        Header header = new Header();
-        header.setVersion(in.readInt());
-        header.setLength(in.readInt());
-        header.setType(in.readByte());
-        header.setPriority(in.readByte());
+        message.setVersion(in.readByte());
+        message.setLength(in.readInt());
+        message.setType(in.readByte());
+        message.setPriority(in.readByte());
 
-        JsonNode body = decoder.decode(in);
-        message.setHeader(header);
+        JsonNode body = decoder.decode(in, message.getLength()-7);
         message.setBody(body);
 
 
